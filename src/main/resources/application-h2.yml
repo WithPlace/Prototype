@@ -1,0 +1,26 @@
+## h2 DB TEST Config
+spring:
+  h2:
+    console:
+      enabled: true
+
+  datasource:
+    url: jdbc:h2:file:~/data/h2/testdb;AUTO_SERVER=TRUE;MODE=mysql
+    ## url : jdbc:h2:mem:testdb;MODE=mssqlserver
+    username: sa
+    password:
+    driver-class-name: org.h2.Driver
+    hikari:
+      idle-timeout: 30000
+      max-lifetime: 30000
+      connection-timeout: 30000
+      validation-timeout: 30000
+      maximum-pool-size: 200
+
+
+  sql:
+    init:
+      mode: always
+      platform: h2
+      #data-locations: classpath*:db/data.sql
+      schema-locations: classpath*:sql/h2_schema.sql

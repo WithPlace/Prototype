@@ -10,7 +10,6 @@ public class WithPlacePrototypeApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(WithPlacePrototypeApplication.class, args);
-        log.info("Hi");
     }
 
 }
