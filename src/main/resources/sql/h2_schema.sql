@@ -9,6 +9,7 @@ DROP TABLE IF EXISTS RECOMMAND;
 
 CREATE TABLE `User` (
     `seq` int PRIMARY KEY,
+    `id` varchar(100),
     `regDate` datetime,
     `uptDate` datetime
 );
@@ -91,3 +92,12 @@ CREATE TABLE `EstMatchRate` (
 CREATE TABLE `RECOMMAND` (
     `id` int PRIMARY KEY
 );
+
+## 별도로 추가한 값(queue나 redis를 안쓰고 DB처리할때 해당부분이 필요, 대상자의 매칭요청에따라 raw가 생김)
+CREATE TABLE 'MATCH_REQUEST'(
+    `seq` int PRIMARY KEY,
+    `userId` varchar(20),
+    `stats` char(1),
+    `regDate` datetime,
+    `uptDate` datetime
+)
