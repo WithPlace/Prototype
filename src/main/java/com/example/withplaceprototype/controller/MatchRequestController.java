@@ -1,11 +1,15 @@
 package com.example.withplaceprototype.controller;
 
+import com.example.withplaceprototype.definition.RequestStatus;
 import com.example.withplaceprototype.definition.ResultCode;
 import com.example.withplaceprototype.entity.MatchRequest;
+import com.example.withplaceprototype.repository.MatchRequestRepository;
 import com.example.withplaceprototype.entity.MatchResponse;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -17,9 +21,13 @@ import javax.servlet.http.HttpServletRequest;
 @Slf4j
 @RestController
 @RequestMapping
+@AllArgsConstructor
 public class MatchRequestController {
 
-    private ObjectMapper mapper = new ObjectMapper();
+    private ObjectMapper mapper;
+
+    @Autowired
+    MatchRequestRepository repo;
 
     @PostConstruct
     public void init(){
@@ -35,20 +43,24 @@ public class MatchRequestController {
     public ResponseEntity<MatchResponse> request(HttpServletRequest httpServletRequest, @RequestBody String body) throws Exception{
 
         MatchRequest matchRequest = mapper.readValue(body, MatchRequest.class);
+        String resultCode = ResultCode.MATCH_CODE_SUCCESS;
+
         HttpStatus httpStatus;
         log.info("matchRequest : {}", matchRequest.toString());
         //1. validation Check
         if(validationCheck(matchRequest)) {
             httpStatus = HttpStatus.OK;
-        } else{
             //2. DB insert
+            repo.save(matchRequest);
+        } else {
+            resultCode = ResultCode.MATCH_CODE_DUPLICATE_REQUEST;
             httpStatus = HttpStatus.BAD_REQUEST;
         }
 
         //3. Response return
         return new ResponseEntity<>(MatchResponse.builder()
                 .userId(matchRequest.getUserId())
-                .code(ResultCode.MATCH_CODE_SUCCESS)
+                .code(resultCode)
                 .build(), httpStatus);
     }
 
@@ -68,6 +80,7 @@ public class MatchRequestController {
     }
 
     public boolean validationCheck(MatchRequest matchRequest){
-        return true;
+        //유저의 중복매칭요청 확인
+        return repo.findByUserIdAndStatus(matchRequest.getUserId(), RequestStatus.REQUESTED) == null;
     }
 }
