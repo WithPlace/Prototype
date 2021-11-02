@@ -17,3 +17,9 @@ logging.level:
 
 server:
   port: 8081
+
+kakao:
+  api:
+    serviceKey: KakaoAK ebc223c6f1f701bd1300694f770383eb
+    url:
+      coord2address: https://dapi:kakao:com/v2/local/geo/coord2address:json

@@ -7,10 +7,7 @@ import lombok.Setter;
 import lombok.ToString;
 import org.hibernate.annotations.DynamicUpdate;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity
 @DynamicUpdate
@@ -42,4 +39,8 @@ public class MatchRequest {
     @Column(name="requestDate")
     @JsonProperty
     String requestDate;
+
+    @Transient
+    @JsonProperty
+    String addressName;
 }
