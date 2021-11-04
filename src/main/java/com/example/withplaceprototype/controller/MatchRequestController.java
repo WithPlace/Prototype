@@ -3,16 +3,14 @@ package com.example.withplaceprototype.controller;
 import com.example.withplaceprototype.definition.RequestStatus;
 import com.example.withplaceprototype.definition.ResultCode;
 import com.example.withplaceprototype.entity.MatchRequest;
+import com.example.withplaceprototype.repository.LawdPlaceRepository;
 import com.example.withplaceprototype.repository.MatchRequestRepository;
 import com.example.withplaceprototype.entity.MatchResponse;
 import com.example.withplaceprototype.service.KakaoApiService;
-import com.example.withplaceprototype.vo.Address;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -29,7 +27,9 @@ public class MatchRequestController {
 
     private final ObjectMapper mapper;
 
-    private final MatchRequestRepository repo;
+    private final MatchRequestRepository matchRepo;
+
+    private final LawdPlaceRepository lawdRepo;
 
     private final KakaoApiService api;
 
@@ -54,13 +54,21 @@ public class MatchRequestController {
         //1. validation Check
         if(validationCheck(matchRequest)) {
             httpStatus = HttpStatus.OK;
-            //2. DB insert
 
+            String lawdCode = null;
             /* TODO. step1 가져온 데이터 중, 좌표를 주소로 변환 */
+            if(matchRequest.getAddressCode() == null){
+                String addressName = matchRequest.getAddressName() != null ?
+                        matchRequest.getAddressName() : api.transfromCoord2Address(matchRequest).getAddressName();
+                 lawdCode = lawdRepo.findByLawdDongEquals(addressName).getLawdCd();
+                matchRequest.setAddressCode(lawdCode);
+                /* TODO. step2. 주소값을 법정동 code에 매칭하여 저장 */
+            } else {
+                lawdCode = matchRequest.getAddressCode();
+            }
 
-            /* TODO. step2. 주소값을 법정동 code에 매칭하여 저장 */
-
-            repo.save(matchRequest);
+            //4. DB insert
+            matchRepo.save(matchRequest);
         } else {
             resultCode = ResultCode.MATCH_CODE_DUPLICATE_REQUEST;
             httpStatus = HttpStatus.BAD_REQUEST;
@@ -90,7 +98,7 @@ public class MatchRequestController {
 
     public boolean validationCheck(MatchRequest matchRequest){
         //유저의 중복매칭요청 확인
-        if(repo.findByUserIdAndStatus(matchRequest.getUserId(), RequestStatus.REQUESTED) == null){
+        if(matchRepo.findByUserIdAndStatus(matchRequest.getUserId(), RequestStatus.REQUESTED) == null){
             return false;
         }
 

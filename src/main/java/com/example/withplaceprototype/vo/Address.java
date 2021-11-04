@@ -10,24 +10,22 @@ import lombok.*;
 @AllArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = false)
 public class Address {
-    @JsonProperty
-    String address_name;
 
-    @JsonProperty
+    @JsonProperty("address_name")
+    String addressName;
+
+    @JsonProperty("x")
     String x;
 
-    @JsonProperty
+    @JsonProperty("y")
     String y;
 
-    @JsonProperty
-    String region_1depth_name;
+    @JsonProperty("region_1depth_name")
+    String dept1;
 
-    @JsonProperty
-    String region_2depth_name;
+    @JsonProperty("region_2depth_name")
+    String dept2;
 
-    @JsonProperty
-    String region_3depth_name;
-
-    @JsonProperty
-    String addressCode;
+    @JsonProperty("region_3depth_name")
+    String dept3;
 }

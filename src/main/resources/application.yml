@@ -23,3 +23,13 @@ kakao:
     serviceKey: KakaoAK ebc223c6f1f701bd1300694f770383eb
     url:
       coord2address: https://dapi:kakao:com/v2/local/geo/coord2address:json
+
+match:
+  service:
+    schedule:
+      cron-expression: '0 0 4 0 0 ?'
+    match-count: 3
+
+lawd:
+  file:
+    path: resources/file

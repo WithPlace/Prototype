@@ -35,7 +35,7 @@ CREATE TABLE `Place` (
 
 CREATE TABLE `LawdPlace` (
      `lawd_id` int PRIMARY KEY,
-     `lawd_cd` varchar(1),
+     `lawd_cd` varchar(10),
      `lawd_dong` varchar(100),
      `exist` varchar(1),
      `reg_date` date,
@@ -102,5 +102,6 @@ CREATE TABLE `MATCH_REQUEST`(
     `status` char(1),
     `request_date` varchar(20),
     `reg_date` date,
-    `upt_Date` date
+    `upt_Date` date,
+    `addressCode` varchar(10)
 )

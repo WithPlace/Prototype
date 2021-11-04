@@ -14,7 +14,7 @@ import javax.persistence.*;
 @Table(name="MATCH_REQUEST")
 @ToString(exclude = {"seq"})
 @Getter @Setter
-public class MatchRequest {
+public class MatchRequest implements Comparable<MatchRequest>{
 
     @Id
     @Column(name="seq")
@@ -40,7 +40,16 @@ public class MatchRequest {
     @JsonProperty
     String requestDate;
 
+    @Column(name="addressCode")
+    @JsonProperty
+    String addressCode;
+
     @Transient
     @JsonProperty
     String addressName;
+
+    @Override
+    public int compareTo(MatchRequest o) {
+        return Integer.compare(this.seq, o.seq);
+    }
 }
