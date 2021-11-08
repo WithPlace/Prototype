@@ -15,4 +15,9 @@ spring:
 
 logging.level:
   org.hibernate.SQL: debug
-#  org.hibernate.type: trace
+  org.hibernate.type: trace
+
+kakao:
+  api-url: https://dapi.kakao.com
+  header: KakaoAK
+  api-key: 00aa4b842e7634793b2cb1cf096795d8

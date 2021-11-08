@@ -1,11 +1,10 @@
 package com.example.withplaceprototype.controller;
 
-import com.example.withplaceprototype.entity.value.Address;
 import com.example.withplaceprototype.entity.MatchingRequest;
 import com.example.withplaceprototype.utils.ApiResponse;
 import com.example.withplaceprototype.utils.MatcingStatus;
 import com.example.withplaceprototype.service.impl.RandomMatchingServiceImpl;
-import com.example.withplaceprototype.utils.MatchingRequestVO;
+import com.example.withplaceprototype.vo.MatchingRequestVO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -24,20 +23,10 @@ public class RandomMatchingController {
     // 매칭 요청
     @PostMapping("/request")
     public ResponseEntity<ApiResponse<MatchingRequest>> requestMatching(@RequestBody MatchingRequestVO matchingRequestBody) {
-
         log.info("matchingRequest=[{}]", matchingRequestBody.toString());
 
-        MatchingRequest matchingRequest = new MatchingRequest();
-        matchingRequest.setMatchingType(matchingRequestBody.getMatchingType());
-        matchingRequest.setStatus(MatcingStatus.REQ);
-
-        // TODO
-        // 입력받은 address를 kakao api로 검색하여 법정동으로 변환
-        matchingRequest.setAddress(new Address("경기도","성남시","신흥동"));
-
-        matchingRequest.setUserId(matchingRequestBody.getUserId()); // TODO-01 이거 없애야 함!!
-
-        return randomMatchingServiceImpl.requestMatching(matchingRequest);
+        matchingRequestBody.setStatus(MatcingStatus.REQ);
+        return randomMatchingServiceImpl.requestMatching(matchingRequestBody);
     }
 
     // 매칭 수락 (매칭이 이루어진 후 호출 가능)

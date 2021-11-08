@@ -10,7 +10,7 @@ import java.util.List;
 @Entity
 @Getter @Setter // Setter는 나중에 삭제해야 함.
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@ToString(of = {"seq", "userId", "userPw", "userName", "age", "gender"})
+@ToString(exclude = {"userMatchingRequestList"})
 public class User extends BaseEntity {
 
     @Id
