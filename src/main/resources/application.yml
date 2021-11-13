@@ -1,0 +1,31 @@
+spring:
+  profiles:
+    default: dev
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/withPlace?serverTimezone=UTC&characterEncoding=UTF-8&useSSL=false
+    username: root
+    password: ''
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        #        show_sql: true
+        format_sql: true
+    open-in-view: false
+    show-sql: true
+
+http:
+  client:
+    connectionTimeout: 3000
+    readTimeout: 7000
+    maxConnection: 50
+    maxConnPerRoute: 10
+
+logging.level:
+  org.hibernate.SQL: debug
+
+
+#  org.hibernate.type: trace
